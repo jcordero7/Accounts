@@ -1,0 +1,96 @@
+@model Accounts.Models.ViewModels.UserEnabledAViewModel
+
+@{
+    Layout = "_LayoutAuth";
+    ViewData["Title"] = "Confirmar cuenta";
+
+    var tiempo = ViewData["Tiempo"] == null ? 0 : (int)ViewData["Tiempo"];
+    var msn2 = tiempo == 0 ? "" : "Tienes 60 min para activar la cuenta";
+}
+
+<h1>Confirmar cuenta</h1>
+<p class="text-muted mt-sm" style="margin-bottom:1.5rem;">
+    Introduce el código enviado a <strong>@Model.Email</strong>. @msn2
+</p>
+
+<form action="/Login/ConfirmAccount" method="post">
+    <input type="hidden" name="Email" value="@Model.Email" />
+    <input type="hidden" name="System" value="@Model.System" />
+
+    <div class="field">
+        <label class="label">E-mail</label>
+        <input asp-for="Email" type="text" class="input" required />
+    </div>
+
+    <div class="field">
+        <label class="label">Código</label>
+        <input asp-for="Code" type="text" class="input" required />
+        <span asp-validation-for="Code"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block">Aceptar</button>
+</form>
+
+<div class="mt-lg">
+    <button id="btnReenviarCodigo" class="btn btn-secondary" type="button">
+        Enviar código de activación
+    </button>
+
+    <div id="contenedorContador" class="help-text" style="display: none;">
+        Podrás solicitar un nuevo código en: <strong id="contador">@tiempo</strong> segundos.
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    $(document).ready(function () {
+        var tiempoDisp = @tiempo;
+        if (tiempoDisp > 0)
+            iniciarContador(60);
+
+        $('#btnReenviarCodigo').on('click', function () {
+            enviarCodigoPorAjax();
+            iniciarContador(60);
+        });
+    });
+
+    function iniciarContador(segundosTotales) {
+        var $btn = $('#btnReenviarCodigo');
+        var $contenedor = $('#contenedorContador');
+        var $contador = $('#contador');
+        var tiempoRestante = segundosTotales;
+
+        $btn.prop('disabled', true).text('Código enviado');
+        $contador.text(tiempoRestante);
+        $contenedor.fadeIn();
+
+        var temporizador = setInterval(function () {
+            tiempoRestante--;
+            $contador.text(tiempoRestante);
+
+            if (tiempoRestante <= 0) {
+                clearInterval(temporizador);
+                $btn.prop('disabled', false).text('Reenviar código');
+                $contenedor.fadeOut();
+            }
+        }, 1000);
+    }
+
+    function enviarCodigoPorAjax() {
+        var data = { email: "@Model.Email" };
+
+        $.ajax({
+            url: '/Login/ReenviarCodigo',
+            type: 'GET',
+            data: data,
+            success: function (result) {
+                if (result) {
+                    alert("Código enviado con éxito");
+                } else {
+                    alert("No se pudo enviar el código");
+                }
+            }
+        });
+    }
+</script>
+}

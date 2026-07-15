@@ -1,0 +1,15 @@
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="page-header">
+    <h1>Hubo un problema al procesar tu solicitud</h1>
+</div>
+
+<div class="card">
+    <p>Por favor, intenta de nuevo o contacta a soporte.</p>
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+    }
+</div>

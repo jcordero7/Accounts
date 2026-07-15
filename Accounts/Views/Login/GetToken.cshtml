@@ -1,0 +1,66 @@
+@model Accounts.Models.ViewModels.UserEnabledAViewModel
+
+@{
+    Layout = "_LayoutAuth";
+    ViewData["Title"] = "Solicitar token";
+}
+
+<h1>Solicitar token</h1>
+
+@using (Html.BeginForm("ConfirmAccount", "Login", FormMethod.Post))
+{
+    <div id="Pant1Token">
+        <div class="field">
+            <label class="label">Correo electrónico</label>
+            <input asp-for="Email" type="text" class="input" />
+        </div>
+        <input asp-for="System" type="hidden" />
+        <input id="Gettoken" type="button" value="Solicitar token" class="btn btn-primary btn-block" />
+    </div>
+
+    <div id="Pant2Token" class="mt-lg">
+        <p class="text-muted mt-sm">Ingrese el token enviado a su correo:</p>
+
+        <div class="field">
+            <input asp-for="Code" type="text" class="input" placeholder="Código" />
+            <span id="msn" class="help-text"></span>
+        </div>
+
+        <div class="flex gap-sm">
+            <input id="GettokenNew" type="button" value="Volver a solicitar token" class="btn btn-secondary" />
+            <button type="submit" class="btn btn-primary">Aceptar</button>
+        </div>
+    </div>
+}
+
+@section Scripts {
+<script type="text/javascript">
+    var ultGetT = '@Url.Action("RequestToken", "Login")';
+
+    $('#Gettoken').click(function () {
+        ObtenerToken();
+    });
+
+    $('#GettokenNew').click(function () {
+        ObtenerToken();
+    });
+
+    function ObtenerToken() {
+        var mail = $('#Email').val();
+
+        $.ajax({
+            url: ultGetT,
+            type: 'GET',
+            cache: false,
+            data: { email: mail },
+            success: function (result) {
+                if (result != null) {
+                    $('#msn').text = "Correcto";
+                } else {
+                    $('#msn').text = "Incorrecto";
+                }
+            }
+        });
+    }
+</script>
+}

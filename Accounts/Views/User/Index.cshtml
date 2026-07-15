@@ -1,0 +1,128 @@
+@model Accounts.Models.ViewModels.UserViewModel
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Cuenta";
+}
+
+<div class="page-header">
+    <h1>Datos personales</h1>
+    <p>Actualiza tu información de contacto y contraseña.</p>
+</div>
+
+<div class="card">
+    @using (Html.BeginForm("Edit", "User", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <input asp-for="Id" type="hidden" />
+
+        <div class="field">
+            <label asp-for="Names" class="label"></label>
+            <input asp-for="Names" class="input" />
+        </div>
+
+        <div class="field">
+            <label asp-for="SurNames" class="label"></label>
+            <input asp-for="SurNames" class="input" />
+        </div>
+
+        <div class="field">
+            <label asp-for="Phone" class="label"></label>
+            <input asp-for="Phone" class="input" />
+        </div>
+
+        <div class="field">
+            <label asp-for="Email" class="label"></label>
+            <input asp-for="Email" class="input" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Actualizar</button>
+    }
+</div>
+
+<div class="card">
+    <h2 class="card-title">Contraseña</h2>
+    <p class="text-muted" style="margin-bottom:1rem;">Cambia la contraseña de tu cuenta.</p>
+    <button type="button" class="btn btn-secondary" id="btnCamPass">Cambiar contraseña</button>
+</div>
+
+<div class="modal-backdrop" id="modalpass">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <h2 style="margin:0;">Cambiar contraseña</h2>
+            <button type="button" class="modal-close" id="idButCancelPass" aria-label="Cerrar">&times;</button>
+        </div>
+
+        <div class="modal-body">
+            <div class="field">
+                <label class="label">Contraseña actual</label>
+                <input type="password" class="input" id="idpassactual" />
+            </div>
+            <div class="field">
+                <label class="label">Contraseña nueva</label>
+                <input type="password" class="input" id="idpassnueva1" />
+            </div>
+            <div class="field">
+                <label class="label">Confirmar contraseña</label>
+                <input type="password" class="input" id="idpassnueva2" />
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button id="idButCancelPass2" type="button" class="btn btn-secondary">Cerrar</button>
+            <button id="idSavePass" type="button" class="btn btn-primary">Cambiar</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script type="text/javascript">
+
+    function closeModal() { $('#modalpass').removeClass('is-open'); }
+
+    $('#btnCamPass').click(function () {
+        $('#modalpass').addClass('is-open');
+    });
+
+    $('#idButCancelPass, #idButCancelPass2').click(function () {
+        closeModal();
+    });
+
+    $('#modalpass').click(function (e) {
+        if (e.target.id === 'modalpass') closeModal();
+    });
+
+    $('#idSavePass').click(function () {
+        CambiarPass();
+    });
+
+    function CambiarPass() {
+        var passactual = $('#idpassactual').val();
+        var passnueva1 = $('#idpassnueva1').val();
+        var passnueva2 = $('#idpassnueva2').val();
+
+        if (passnueva1 == passnueva2) {
+
+            var data = { PasswordActual: passactual, PasswordNueva: passnueva1 };
+
+            $.ajax({
+                url: '/User/CambiarPassword',
+                type: 'POST',
+                data: data,
+                success: function (result) {
+                    if (result.success == true) {
+                        closeModal();
+                        alert("La contraseña se ha cambiado con exito");
+                    } else {
+                        alert("No se pudo cambiar la contraseña");
+                    }
+                }
+            });
+        }
+        else {
+            alert("Las contraseñas no coinciden");
+        }
+    }
+
+</script>
+}

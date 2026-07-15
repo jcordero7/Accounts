@@ -1,0 +1,66 @@
+@model Accounts.Models.ViewModels.UserViewModel
+
+@{
+    Layout = "_LayoutAuth";
+    ViewData["Title"] = "Crear cuenta";
+
+    var systemName = ViewData["SystemName"] == null ? "" : (string)ViewData["SystemName"];
+    var systemId = ViewData["SystemId"] == null ? 0 : (int)ViewData["SystemId"];
+}
+
+<h1>Crea una cuenta Buscadme</h1>
+@if (!string.IsNullOrEmpty(systemName))
+{
+    <p class="text-muted mt-sm" style="margin-bottom:1.5rem;">Ir a @systemName</p>
+}
+
+@using (Html.BeginForm("Create", "User"))
+{
+    @Html.AntiForgeryToken()
+
+    if (systemId != 0)
+    {
+        <input asp-for="Program" value="@systemId" type="hidden" />
+    }
+    else
+    {
+        <input asp-for="Program" type="hidden" />
+    }
+
+    <div class="field">
+        <div class="input-group">
+            <div style="flex:1;">
+                <label class="label">Nombre</label>
+                <input asp-for="Names" type="text" class="input" placeholder="Nombre" />
+            </div>
+            <div style="flex:1;">
+                <label class="label">Apellidos</label>
+                <input asp-for="SurNames" type="text" class="input" placeholder="Apellidos" />
+            </div>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">E-mail</label>
+        <input asp-for="Email" type="text" class="input" placeholder="e-mail" />
+    </div>
+
+    <div class="field">
+        <div class="input-group">
+            <div style="flex:1;">
+                <label class="label">Contraseña</label>
+                <input asp-for="Password" type="password" class="input" placeholder="Contraseña" />
+            </div>
+            <div style="flex:1;">
+                <label class="label">Confirmar</label>
+                <input type="password" class="input" placeholder="Confirmar" />
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block">Crear cuenta</button>
+}
+
+<p class="auth-foot">
+    ¿Ya tienes una cuenta? <a href="http://cuentas.buscadme.org/Login/UserLogin">Inicia sesión</a>
+</p>

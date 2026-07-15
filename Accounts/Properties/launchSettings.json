@@ -1,0 +1,44 @@
+{
+
+    "profiles": {
+        ////"IIS Express": {
+        ////    "commandName": "IISExpress",
+        ////    "launchBrowser": true,
+        ////    "environmentVariables": {
+        ////        "ASPNETCORE_ENVIRONMENT": "Development"
+        ////    }
+        ////},
+        //"Accounts": {
+        //    "commandName": "Project",
+        //    "launchBrowser": true,
+        //    "environmentVariables": {
+        //        "ASPNETCORE_ENVIRONMENT": "Development"
+        //    },
+        //    "applicationUrl": "https://localhost:5001;http://localhost:5000"
+        //},
+        //"IIS Local": {
+        //    "commandName": "IIS"
+        //},
+        "IIS Local cuentas": {
+            "commandName": "IIS",
+            "launchBrowser": true,
+            "launchUrl": "http://cuentas.buscadme.org",
+            "environmentVariables": {
+                "ASPNETCORE_ENVIRONMENT": "Desarrollo"
+            }
+        }
+    },
+
+    "iisSettings": {
+        "windowsAuthentication": false,
+        "anonymousAuthentication": true,
+        "iis": {
+            "applicationUrl": "http://cuentas.buscadme.org",
+            "sslPort": 0
+        }
+        //"iisExpress": {
+        //    "applicationUrl": "http://localhost:64825",
+        //    "sslPort": 44311
+        //}
+    }
+}

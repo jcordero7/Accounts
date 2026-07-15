@@ -1,0 +1,21 @@
+@model Accounts.Models.ViewModels.UserEnabledAViewModel
+
+@{
+    Layout = "_LayoutAuth";
+    ViewData["Title"] = "Habilitar cuenta";
+}
+
+<h1>Habilitar cuenta</h1>
+<p class="text-muted mt-sm" style="margin-bottom:1.5rem;">Introduce el código que enviamos a tu correo para activar tu cuenta.</p>
+
+@using (Html.BeginForm("ConfirmAccount", "Login"))
+{
+    <div class="field">
+        <label class="label">Código</label>
+        <input asp-for="Code" type="text" class="input" placeholder="Código" />
+    </div>
+    <input asp-for="Email" type="hidden" />
+    <input asp-for="System" type="hidden" />
+
+    <button type="submit" class="btn btn-primary btn-block">Aceptar</button>
+}

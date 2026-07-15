@@ -1,0 +1,72 @@
+@{
+    var isAuth = User.Identity != null && User.Identity.IsAuthenticated;
+    var email = isAuth ? (User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? "") : "";
+    var initial = string.IsNullOrEmpty(email) ? "?" : email.Substring(0, 1).ToUpperInvariant();
+
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+    var action = ViewContext.RouteData.Values["action"]?.ToString();
+    bool IsActive(string c, string a) => string.Equals(controller, c, StringComparison.OrdinalIgnoreCase)
+        && string.Equals(action, a, StringComparison.OrdinalIgnoreCase);
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Accounts</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <div class="app-shell">
+        @if (isAuth)
+        {
+            <aside class="sidebar">
+                <div class="sidebar-profile">
+                    <div class="avatar">@initial</div>
+                    <div class="sidebar-profile-text">
+                        <div class="sidebar-profile-name">@email</div>
+                        <div class="sidebar-profile-role">Cuenta Buscadme</div>
+                    </div>
+                </div>
+
+                <ul class="sidebar-nav">
+                    <li>
+                        <a class="nav-link @(IsActive("User", "Index") ? "is-active" : "")" asp-controller="User" asp-action="Index">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 0 0-16 0" /><circle cx="12" cy="7" r="4" /></svg>
+                            Cuenta
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link" asp-controller="Login" asp-action="Logout">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><path d="M16 17l5-5-5-5" /><path d="M21 12H9" /></svg>
+                            Cerrar sesión
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="sidebar-footer">&copy; @DateTime.Now.Year Buscadme</div>
+            </aside>
+        }
+        else
+        {
+            <aside class="sidebar">
+                <div class="sidebar-brand">
+                    <div class="avatar" style="background: var(--color-accent); color: var(--color-accent-foreground);">B</div>
+                    Accounts
+                </div>
+            </aside>
+        }
+
+        <main class="main-content">
+            <div class="content-container">
+                @RenderBody()
+            </div>
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

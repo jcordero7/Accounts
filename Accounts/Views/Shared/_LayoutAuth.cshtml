@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Accounts</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <div class="auth-shell">
+        <a class="auth-brand" asp-controller="Login" asp-action="UserLogin">
+            <div class="avatar">B</div>
+            Accounts
+        </a>
+
+        <div class="auth-card">
+            @RenderBody()
+        </div>
+
+        <div class="auth-footer">&copy; @DateTime.Now.Year Buscadme</div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

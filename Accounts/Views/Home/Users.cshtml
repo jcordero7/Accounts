@@ -1,0 +1,31 @@
+@model IEnumerable<Accounts.Models.ViewModels.UserViewModel>
+
+@{
+    ViewData["Title"] = "Usuarios";
+}
+
+<div class="page-header">
+    <h1>Usuarios</h1>
+</div>
+
+<div class="card" style="padding:0;">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Id)</th>
+                <th>@Html.DisplayNameFor(model => model.Names)</th>
+                <th>@Html.DisplayNameFor(model => model.Email)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Names)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
